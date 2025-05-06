@@ -33,7 +33,6 @@ mailagentcookil/
 │   └── cli/             # Admin tools for moderation, approval, etc.
 ├── .env
 ├── requirements.txt
-├── ARCHIVE_README.md
 ├── ROADMAP.md
 ├── TAGS.md
 ├── IDENTITIES.md
