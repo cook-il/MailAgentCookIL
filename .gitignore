@@ -1,0 +1,11 @@
+.env
+__pycache__/
+*.pyc
+*.log
+logs/
+.venv/
+# LangChain cache (if used)
+.cache/
+test.sh
+mailagent/tests/
+mailagent.db

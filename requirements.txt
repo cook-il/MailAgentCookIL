@@ -1,0 +1,9 @@
+imaplib2
+smtplib
+email
+python-dotenv
+beautifulsoup4==4.13.4
+langchain
+langchain-openai
+faiss-cpu
+chromadb
