@@ -34,7 +34,10 @@ mailagentcookil/
 ├── .env
 ├── requirements.txt
 ├── ROADMAP.md
+├── LICENSE
+├── README.md
 ├── TAGS.md
+├── PROJECT_REQUIREMENTS.md
 ├── IDENTITIES.md
 └── CONTRIBUTING.md
 ```
