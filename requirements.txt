@@ -10,3 +10,4 @@ faiss-cpu
 chromadb
 openai
 imapclient
+tabulate

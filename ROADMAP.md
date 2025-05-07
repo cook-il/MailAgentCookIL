@@ -6,7 +6,7 @@ This roadmap outlines the development plan for `MailAgentCookIL`, the successor 
 
 ## ✅ v1.0.0 — MVP Completion (Baseline Functionality)
 
-**Status:** ✅ Completed 
+**Status:** ✅ Completed  
 **Goal:** End-to-end functioning pipeline from email intake to AI response using verified commands only.
 
 ### Core Features
@@ -22,66 +22,39 @@ This roadmap outlines the development plan for `MailAgentCookIL`, the successor 
 - [x] `handlers/`: process each supported command
 - [x] `database/`: schema for messages and knowledge_base
 - [x] `langchain/`: isolated logic for generating responses
-- [ ] `cli/`: simple moderation tool to approve facts/rags
+- [x] `tools/`: CLI-based moderation commands
 
 ---
 
 ## 🔁 v1.1.0 — Admin Moderation Tool (CLI Focus)
 
-**Status:** Planned  
+**Status:** Completed  
 **Goal:** Enable manual approval and deletion of submitted `/fact` and `/rag` entries
 
 ### Features
-- [ ] CLI interface for:
-  - Listing unapproved entries
-  - Approving individual or batch entries
-  - Deleting malformed or malicious entries
-- [ ] Logging and confirmation prompts for all moderation actions
-
+- [x] CLI interface for:
+  - [x] Listing unapproved entries
+  - [x] Approving individual or batch entries
+  - [x] Deleting malformed or malicious entries
+- [x] Tested against an isolated database
+- [x] `tabulate`-based output formatting
 ---
 
-## 🧪 v1.2.0 — Testing, Resilience & Logging
+## 🧪 v1.2.0 — Web-Based Moderation (Web2Py Dashboard)
 
-**Status:** Planned  
-**Goal:** Harden the system for edge cases and improve observability
+**Status:** In Progress  
+**Goal:** Replace CLI moderation with a secure, browser-based admin panel
 
 ### Features
-- [ ] Robust error handling (invalid command formats, DB write failures)
-- [ ] Daily log rotation or pruning
-- [ ] Email ID / hash deduplication logic
-- [ ] CLI command to inspect stored message history
+- [ ] Secure login (password-protected Web2Py admin)
+- [ ] Moderation dashboard listing all unapproved entries
+- [ ] Approve or delete entries from the web UI
+- [ ] Action logging (moderator, timestamp, action type)
+- [ ] Entry details and filters (by type, contributor, or keyword)
+- [ ] Optional JSON API support for future UI reuse
 
 ---
 
-## 🚀 v2.0.0 — Expansion & Optional Web GUI (TBD)
+## 🧭 Future Milestones
 
-**Status:** Future  
-**Goal:** Explore optional GUI for admin moderation while maintaining full offline CLI parity
-
-### Optional Features
-- [ ] Lightweight web dashboard for reviewing `/fact` and `/rag` submissions
-- [ ] Role-based access control for multiple admins
-- [ ] Metrics dashboard (counts, per-user stats, etc.)
-
----
-
-## 🔒 Long-Term Security Goals
-
-- [ ] DKIM/SPF enforcement and logging
-- [ ] PGP integration for signed email verification
-- [ ] Optional message integrity hashing per entry
-- [ ] Rate limiting and IP logging (optional)
-
----
-
-## 🗂 Supporting Files and Standards
-
-- `TAGS.md`: Maintain topic classification for RAG facts
-- `IDENTITIES.md`: Authoritative list of trusted agents
-- `CONTRIBUTING.md`: Contributor guidelines and command rules
-
----
-
-## 📍 Current Location
-
-All development is taking place in:
+_(To be defined after v1.2.0 is complete)_
