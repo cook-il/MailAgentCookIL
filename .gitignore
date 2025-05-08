@@ -9,4 +9,4 @@ logs/
 test.sh
 mailagent/tests/
 mailagent.db
-/home/aiagent/MailAgentCookIL/
+models/

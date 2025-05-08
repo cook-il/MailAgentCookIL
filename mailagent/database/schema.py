@@ -1,32 +1,34 @@
-import sqlite3
+# mailagent/database/schema.py
 
-def initialize_db(path="mailagent.db"):
-    conn = sqlite3.connect(path)
-    cursor = conn.cursor()
+CREATE_KNOWLEDGE_BASE_TABLE = """
+CREATE TABLE IF NOT EXISTS knowledge_base (
+    id INTEGER PRIMARY KEY,
+    sender TEXT,
+    type TEXT,
+    content TEXT,
+    source TEXT,
+    approved_by_admin INTEGER DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+"""
 
-    # Table for storing raw emails
-    cursor.execute('''
-    CREATE TABLE IF NOT EXISTS messages (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        sender TEXT NOT NULL,
-        command TEXT NOT NULL,
-        body TEXT NOT NULL,
-        timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
-    )
-    ''')
+CREATE_LOGS_TABLE = """
+CREATE TABLE IF NOT EXISTS logs (
+    id INTEGER PRIMARY KEY,
+    timestamp TEXT,
+    sender TEXT,
+    command TEXT,
+    status TEXT,
+    notes TEXT
+);
+"""
 
-    # Table for RAG and fact inputs
-    cursor.execute('''
-    CREATE TABLE IF NOT EXISTS knowledge_base (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        contributor TEXT NOT NULL,
-        type TEXT CHECK(type IN ('fact', 'rag')) NOT NULL,
-        content TEXT NOT NULL,
-        source TEXT,
-        approved_by_admin INTEGER DEFAULT 0,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    )
-    ''')
-
-    conn.commit()
-    conn.close()
+CREATE_MESSAGES_TABLE = """
+CREATE TABLE IF NOT EXISTS messages (
+    id INTEGER PRIMARY KEY,
+    sender TEXT NOT NULL,
+    command TEXT NOT NULL,
+    body TEXT,
+    received_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+"""

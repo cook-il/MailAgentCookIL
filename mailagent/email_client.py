@@ -1,3 +1,5 @@
+# mailagent/email_client.py
+
 import os
 import email
 from datetime import datetime
@@ -5,7 +7,6 @@ from imapclient import IMAPClient
 import smtplib
 from email.mime.text import MIMEText
 
-from mailagent.handlers.router import route_email
 from mailagent.email_settings import (
     EMAIL_USER, EMAIL_PASSWORD,
     IMAP_HOST, IMAP_PORT,
@@ -17,13 +18,19 @@ from mailagent.email_settings import (
 LOG_PATH = "logs/mailagent.log"
 
 
-def fetch_and_process():
+def fetch_unread_emails():
+    """
+    Returns a list of tuples: (sender, body, uid)
+    Only from allowed domains.
+    """
+    messages = []
+
     with IMAPClient(IMAP_HOST, port=IMAP_PORT, ssl=True) as client:
         client.login(EMAIL_USER, EMAIL_PASSWORD)
         client.select_folder("INBOX")
-        messages = client.search(["UNSEEN"])
+        uids = client.search(["UNSEEN"])
 
-        for uid in messages:
+        for uid in uids:
             raw_msg = client.fetch([uid], ["RFC822"])[uid][b"RFC822"]
             msg = email.message_from_bytes(raw_msg)
             sender = email.utils.parseaddr(msg["From"])[1]
@@ -38,20 +45,36 @@ def fetch_and_process():
             if msg.is_multipart():
                 for part in msg.walk():
                     if part.get_content_type() == "text/plain":
-                        body = part.get_payload(decode=True).decode(part.get_content_charset(), errors="replace")
+                        body = part.get_payload(decode=True).decode(
+                            part.get_content_charset() or "utf-8",
+                            errors="replace"
+                        )
                         break
             else:
-                body = msg.get_payload(decode=True).decode(msg.get_content_charset(), errors="replace")
+                body = msg.get_payload(decode=True).decode(
+                    msg.get_content_charset() or "utf-8",
+                    errors="replace"
+                )
 
             if not body:
                 print(f"⚠️ No usable plain text content from {sender}")
                 continue
 
-            print(f"📥 Processing from {sender}")
-            reply = route_email(sender, body)
-            send_reply(sender, reply)
-            log_interaction(sender, body, reply)
-            client.add_flags(uid, [b'\\Seen'])  # Mark as read
+            messages.append((sender, body.strip(), uid))
+
+    return messages
+
+
+def delete_email(uid):
+    """
+    Permanently delete an email from the INBOX by UID.
+    """
+    with IMAPClient(IMAP_HOST, port=IMAP_PORT, ssl=True) as client:
+        client.login(EMAIL_USER, EMAIL_PASSWORD)
+        client.select_folder("INBOX")
+        client.delete_messages([uid])
+        client.expunge()
+        print(f"🗑 Deleted email UID {uid}")
 
 
 def send_reply(to_address, body):
@@ -77,7 +100,3 @@ def log_interaction(sender, body, reply):
         log.write("Body:\n" + body + "\n")
         log.write("Reply:\n" + reply + "\n")
         log.write("-" * 60 + "\n")
-
-
-if __name__ == "__main__":
-    fetch_and_process()
