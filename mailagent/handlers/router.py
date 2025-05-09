@@ -5,12 +5,15 @@ from mailagent.handlers.ask import handle_ask
 from mailagent.handlers.fact import handle_fact
 from mailagent.handlers.rag import handle_rag
 from mailagent.handlers.help import handle_help
+from mailagent.handlers.link import handle_link
+
 
 VALID_COMMANDS = {
     "/ask": handle_ask,
     "/fact": handle_fact,
     "/rag": handle_rag,
     "/help": lambda *_: handle_help(),
+    "/link": handle_link,
 }
 
 def route_email(sender: str, body: str) -> str:
@@ -41,7 +44,7 @@ def route_email(sender: str, body: str) -> str:
 
     # Route to appropriate handler
     handler = VALID_COMMANDS[command]
-    if command in ["/ask", "/fact", "/rag"]:
-        return handler(rest_of_body, sender)
+    if command in ["/ask", "/fact", "/rag", "/link"]:
+        return handler(sender, rest_of_body)
     else:
         return handler()

@@ -12,23 +12,23 @@ def insert_message(sender, command, body):
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute(
-        '''
-        INSERT INTO messages (sender, command, body)
-        VALUES (?, ?, ?)
-        ''',
-        (sender, command, body)
+        """
+        INSERT INTO messages (sender, command, body, timestamp)
+        VALUES (?, ?, ?, ?)
+        """,
+        (sender, command, body, datetime.now().isoformat())
     )
     conn.commit()
     conn.close()
-
 
 def fetch_all_messages():
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM messages ORDER BY timestamp DESC')
-    results = cursor.fetchall()
+    rows = cursor.fetchall()
+    columns = [col[0] for col in cursor.description]
     conn.close()
-    return results
+    return [dict(zip(columns, row)) for row in rows]
 
 
 # ========== KNOWLEDGE BASE ==========
