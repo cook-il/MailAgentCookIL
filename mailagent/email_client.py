@@ -79,7 +79,7 @@ def delete_email(uid):
 
 def send_reply(to_address, body):
     msg = MIMEText(body)
-    msg["Subject"] = "Re: Your MailAgentCookIL Command"
+    msg["Subject"] = "Re: From the cook-il.us AIAgent"
     msg["From"] = FROM_ADDRESS
     msg["To"] = to_address
     msg["Reply-To"] = REPLY_TO

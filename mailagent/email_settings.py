@@ -23,4 +23,6 @@ ALLOWED_DOMAINS = [
     "cook-il.us",
     "kane-il.us",
     "dupage-il.us",
+    "aol.com",
+    "gmail.com"
 ]
